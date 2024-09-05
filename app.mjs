@@ -250,7 +250,7 @@ app.post('/register', async (req, res) => {
   } catch (e) {
     res.render('register', { error: 'Database unable to register user' });
     console.log("Database cannot register");
-    registrationSuccess = false;
+    registrationSuccess = false; 
     console.error(e);
   }
   console.log(registrationSuccess);
