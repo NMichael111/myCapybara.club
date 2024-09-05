@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{ Feed } Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        img {
+            max-width: 300px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        p {
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            margin-bottom: 6px;
+            color: #777;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>{{ pet.name }} Details</h1>
+    <img src={{ pet.color }} alt="{{ pet.name }}">
+
+    <h1>Capybara Food Choices</h1>
+
+    <form action="/feed" method="post">
+        <label for="food">Select Capybara's Food:</label><br>
+
+        <input type="radio" id="grass" name="food" value="grass" required>
+        <label for="grass">Grass</label><br>
+
+        <input type="radio" id="vegetables" name="food" value="vegetables" required>
+        <label for="vegetables">Vegetables</label><br>
+
+        <input type="radio" id="fruits" name="food" value="fruits" required>
+        <label for="fruits">Fruits</label><br>
+
+        <input type="radio" id="roots" name="food" value="roots" required>
+        <label for="roots">Roots</label><br>
+
+        <input type="radio" id="aquaticPlants" name="food" value="aquaticPlants" required>
+        <label for="aquaticPlants">Aquatic Plants</label><br><br>
+
+        <input type="submit" value="Submit">
+    </form>
+</body>
+
+</html>

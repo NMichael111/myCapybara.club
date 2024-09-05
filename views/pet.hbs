@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ pet.name }} Details</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f8f8;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .card {
+      background-color: #fff;
+      border-radius: 16px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      width: 320px;
+      text-align: center;
+      margin-bottom: 20px; 
+    }
+
+    .image-container {
+      width: 100%;
+      height: 200px;
+      overflow: hidden;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .responsive-image {
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+    }
+
+    p {
+      margin-bottom: 8px;
+      color: #555;
+    }
+
+    .wins-counter {
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      padding: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      display: none;
+    }
+
+    a {
+      display: inline-block;
+      margin: 10px;
+      padding: 10px 20px;
+      border-radius: 4px;
+      text-decoration: none;
+      color: #fff;
+      background-color: #007bff;
+      transition: background-color 0.3s ease;
+    }
+
+    a:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+
+<body>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const sock = io();
+
+    function redirect() {
+      sock.emit('clientRedirect', '/battle');
+    }
+
+    sock.on('challengeFrom', (data) => {
+      console.log(`Received event data:`, data.username);
+
+      const notificationContainer = document.querySelector('.notification-container');
+      const notification = document.createElement('div');
+      notification.classList.add('notification');
+      const message = document.createElement('p');
+      message.textContent = data.username + ' has challenged you';
+      const button = document.createElement('button');
+      button.textContent = 'Accept';
+      button.addEventListener('click', () => {
+        notification.style.display = 'none';
+        notification.remove();
+        sock.emit('acceptedChallenge', {
+          username: data.username,
+          oppPet: data.pet,
+          yourPet: window.location.href.split('/').pop()
+        });
+      });
+
+      notification.appendChild(message);
+      notification.appendChild(button);
+
+      notificationContainer.appendChild(notification);
+      notification.style.display = 'block';
+      setTimeout(() => {
+        notification.style.display = 'none';
+        notification.remove();
+      }, 30000);
+    });
+
+    sock.on('redirect', (data) => {
+      window.location.href = data;
+    });
+  </script>
+  <div class="notification-container"></div>
+
+  
+
+  <div class="card">
+    <h1>{{ pet.name }} </h1>
+    <div class="image-container">
+      <div class="responsive-image" style="background-image: url('{{ pet.color }}');"></div>
+    </div>
+    <p><strong>Strength:</strong> {{ pet.stats.strength }}</p>
+    <p><strong>Health:</strong> {{ pet.stats.health }}</p>
+    <p class="wins-counter">Wins: {{ pet.wins }}</p>
+  </div>
+
+  <a href="/feed">Feed</a>
+  <a href="/play">Play</a>
+  <a href="/challenge?pet={{ pet.id }}">Challenge</a>
+
+</body>
+
+</html>

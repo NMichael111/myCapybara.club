@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Login Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    form {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      width: 300px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    .google-sign-in {
+      text-align: center;
+      margin-top: 20px;
+      /* Add margin to create space between the form and the Google link */
+      color: #343638;
+      text-decoration: none;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .form-container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 340px;
+    }
+
+    .google-sign-in:hover {
+      text-decoration: underline;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      color: #666;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: calc(100% - 12px);
+      padding: 8px;
+      margin-bottom: 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    button[type="submit"] {
+      width: 45%;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      background-color: #343638;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+
+    a {
+      display: block;
+      text-align: center;
+      margin-top: 10px;
+      color: #343638;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    p.error-message {
+      color: red;
+      text-align: center;
+    }
+
+    img {
+      max-width: 300px;
+      height: auto;
+      border-radius: 15px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <img src="/images/title.png" alt="cute cap">
+    <div class="form-container">
+      <form action="/login" method="post">
+        <h1>Login</h1>
+        {{#if error}}
+        <p class="error-message">{{error}}</p>
+        {{/if}}
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <div class="button-container">
+          <button type="submit">Login</button>
+          <a href="/register">Sign Up</a>
+        </div>
+      </form>
+      <div class="google-sign-in">
+        <a href="auth/google">Sign in with Google</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,4 @@
+{
+    "ext": "mjs,js,json,hbs",
+    "exec": "node app.mjs"
+}

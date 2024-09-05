@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Challenge</title>
+    <link rel="stylesheet" href="/stylesheets/styles.css">
+</head>
+
+<body>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const sock = io();
+        sock.on('greeting', data => {
+            console.log(data)
+        });
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const pet = urlParams.get('pet');
+    </script>
+    <div>
+        <h1>Enter Opponent Username</h1>
+        {{#if error}}
+        <div class="error-message">{{error}}</div>
+        {{/if}}
+        <form method="POST" action="">
+            <label for="username">Username:</label>
+            <input type="text" name="username" value="" required>
+            <input type="hidden" name="pet" value={{pet}}>
+            <button type="submit">Challenge</button>
+        </form>
+    </div>
+</body>
+
+</html>

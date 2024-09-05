@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Select a Pet</title>
+  <link rel="stylesheet" href="/stylesheets/styles.css">
+
+  <style>
+    body {
+      display: flex;
+      align-items: flex-start; /* Changed from center to flex-start */
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    form {
+      text-align: center;
+      width: 100%;
+      max-width: 700px;
+    }
+
+    .options-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 0 auto;
+    }
+
+    .option {
+      margin: 10px;
+      cursor: pointer;
+      width: 100%;
+      max-width: 200px;
+      text-align: center;
+    }
+
+    .image-container {
+      width: 100%;
+      padding-top: 100%;
+      position: relative;
+      border: 9px solid #ccc;
+    }
+
+    .image-container img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .option p {
+      margin-top: 5px;
+      font-size: 14px;
+    }
+
+    .option input[type="radio"]:checked+.image-container {
+      border-color: blue;
+    }
+
+    .option:hover .image-container {
+      background-color: #f0f0f0;
+    }
+
+    input[type="text"],
+    button[type="submit"] {
+      margin-top: 10px;
+      width: 100%;
+      max-width: 300px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <form action="/choose" method="post">
+    <div class="options-container">
+      <label class="option">
+        <div class="image-container">
+          <img src={{img1}} alt="Option 1" required>
+        </div>
+        <p>Option 1</p>
+        <input type="radio" name="selectedOption" value={{img1}}>
+      </label>
+
+      <label class="option">
+        <div class="image-container">
+          <img src={{img2}} alt="Option 2" required>
+        </div>
+        <p>Option 2</p>
+        <input type="radio" name="selectedOption" value={{img2}}>
+      </label>
+
+      <label class="option">
+        <div class="image-container">
+          <img src={{img3}} alt="Option 3" required>
+        </div>
+        <p>Option 3</p>
+        <input type="radio" name="selectedOption" value={{img3}}>
+      </label>
+    </div>
+
+    <p>Pick your Capybara!</p>
+
+    {{#if error}}
+    <div class="error-message">{{error}}</div>
+    {{/if}} 
+    <label for="petName">Pet Name:</label>
+    <input type="text" id="petName" name="petName" required>
+
+    <button type="submit">Done</button>
+  
+  </form>
+
+</body>
+
+</html>

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Capybara Battle</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20;
+      padding: ;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+      transform: scale(1);
+      transform-origin: top;
+    }
+
+    .battle-container {
+      text-align: center;
+      background-color: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, .1)
+    }
+
+    .battle-area {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px
+    }
+
+    .capybara {
+      margin: 0 100px
+    }
+
+    .hp-bar {
+      width: 200px;
+      height: 20px;
+      background-color: #ddd;
+      border: 1px solid #999;
+      margin-bottom: 10px;
+      overflow: hidden;
+      border-radius: 5px
+    }
+
+    .hp-bar::after {
+      content: '';
+      display: block;
+      height: 100%;
+      width: calc(var(--hp) * 1%);
+      background-color: #3fa34d;
+      border-radius: 5px
+    }
+
+    .turn-actions {
+      display: flex;
+      justify-content: center
+    }
+
+    .button-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 10px
+    }
+
+    .button-grid button {
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: #4caf50;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color .3s ease
+    }
+
+    /*img {
+      width: 200px;
+      height: 200px;
+      border: 5px solid #ccc;
+      position: relative;
+    }
+    */
+    /*.responsive-image {
+      max-width: 70%;
+      height: auto
+    }
+    */
+    
+    /*.button-grid button:hover {
+      background-color: #357a38
+    }
+    */
+    .header {
+      text-align: left; /* Align the content within the header to the left */
+    }
+
+    #forfeit {
+      background-color: #a93030;
+      color: #ffffff;
+      border: 1px solid #6f2626;
+      padding: 8px 12px;
+      position: absolute;
+      left: 20px; /* Adjust this value to position the button as needed */
+      top: 20px; /* Adjust this value to position the button vertically */
+    }
+
+    .button-grid button.active {
+    background-color: #323136; /* Change this color to the desired active color */
+    color: #fff; /* Text color when button is active */
+    /* Add any other styling you want for the active button */
+    }
+    .image-container {
+      width: 300px; /* Set your desired width */
+      height: 200px; /* Set your desired height */
+      overflow: hidden;
+    }
+
+    .responsive-image {
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <button id="forfeit">Forfeit</button>
+  </div>
+  <div class="battle-container">
+    <h1>Battle</h1>
+
+    <div class="battle-area">
+      <div class="capybara">
+        {{!-- <img class="responsive-image" src={{ user.color }} alt="{{ user.color }}"> --}}
+        <div class="image-container">
+          <div class="responsive-image" style="background-image: url('{{ user.color }}');"></div>
+        </div>
+        <h2>{{ user.username }}</h2>
+        <p>{{ user.name }}</p>
+        <div class="hp-bar-container">
+          <div id="userHpBar" class="hp-bar" style="--hp:{};"></div>
+        </div>
+        <p>Health: <span id="userHealth">{{ user.stats.health }}</span></p>
+        <p>Strength: <span id="userStrength">{{ user.stats.strength }}</span></p>
+        <p>Charges: <span id="userCharges">{{ user.amount }}</span></p>
+      </div>
+      <div class="capybara">
+        {{!-- <img class="responsive-image" src={{ opp.color }} alt="{{ opp.color }}"> --}}
+        <div class="image-container">
+          <div class="responsive-image" style="background-image: url('{{ opp.color }}');"></div>
+        </div>
+        <h2>{{ opp.username }}</h2>
+        <p>{{ opp.name }}</p>
+        <div class="hp-bar-container">
+          <div id="oppHpBar" class="hp-bar" style="--hp:{};"></div>
+        </div>
+        <p>Health: <span id="oppHealth">{{ opp.stats.health }}</span></p>
+        <p>Strength: <span id="oppStrength">{{ opp.stats.strength }}</span></p>
+        <p>Charges: <span id="oppCharges">{{ opp.amount }}</span></p>
+      </div>
+    </div>
+    <div class="turn-actions">
+      <div class="button-grid">
+        <button id="attack">Attack</button>
+        <button id="defend">Defend</button>
+        <button id="recharge">Recharge</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+
+  <script>
+    const sock = io();
+    sock.emit('init', document.getElementById('userHealth').textContent);
+    document.getElementById('forfeit').addEventListener('click', () => {
+      sock.emit('end', 'forfeit');
+    });
+    let userMaxHealth = document.getElementById('userHealth').textContent;
+    let oppMaxHealth = document.getElementById('oppHealth').textContent;
+    console.log('max health: ' + userMaxHealth);
+    const userHpBar = document.getElementById('userHpBar');
+    const oppHpBar = document.getElementById('oppHpBar');
+    const hun = 100;
+    userHpBar.style.width = `${hun}%`;
+    oppHpBar.style.width = `${100}%`;
+
+    var clicked = false;
+    const actionButtons = document.querySelectorAll('.button-grid button');
+    function removeColorClass(){
+      clicked = false;
+      actionButtons.forEach(button => {
+        button.classList.remove('active');
+      });
+    };
+    function press(buttonId) {
+      if(!clicked){
+        clicked = true;
+        const clickedButton = document.getElementById(buttonId);
+        clickedButton.classList.add('active'); 
+        sock.emit('action', buttonId);  
+      }
+       
+    }
+    actionButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        press(button.id);
+      });
+    });
+    //document.getElementById('attack').addEventListener('click', () => {
+      //sock.emit('action', 'attack');
+    //});
+    //document.getElementById('defend').addEventListener('click', () => {
+      //sock.emit('action', 'defend');
+    //});
+    //document.getElementById('recharge').addEventListener('click', () => {
+      //sock.emit('action', 'recharge');
+    //});
+    sock.on('battleUpdate', (data) => {
+      removeColorClass();
+      console.log('update');
+      console.log(data);
+      let userHealth = parseInt(document.getElementById('userHealth').textContent);
+      const userStrength = parseInt(document.getElementById('userStrength').textContent);
+      console.log('before ' + userHealth);
+      document.getElementById('userHealth').textContent = data.user.health;
+      document.getElementById('oppHealth').textContent = data.opp.health;
+      document.getElementById('userCharges').textContent = data.user.amount;
+      document.getElementById('oppCharges').textContent = data.opp.amount;
+
+
+      document.getElementById('userHpBar').style.width = `${((data.user.health / userMaxHealth) * 100)}%`;
+      document.getElementById('oppHpBar').style.width = `${((data.opp.health / oppMaxHealth) * 100)}%`;;
+    });
+    sock.on('redirect', (data) => {
+      window.location.href = data;
+    });
+
+  </script>
+
+
+</body>
+
+</html>

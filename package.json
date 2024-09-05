@@ -1,0 +1,36 @@
+{
+  "name": "final-project-nmichael111-1",
+  "version": "1.0.0",
+  "description": "The content below is an example project proposal / requirements document. Replace the text below the lines marked \"__TODO__\" with details specific to your project. Remove the \"TODO\" lines.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.mjs"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.6.2",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.3.1",
+    "escape-string-regexp": "^5.0.0",
+    "express": "^4.18.2",
+    "express-middleware": "^3.4.2",
+    "express-session": "^1.17.3",
+    "hbs": "^4.2.0",
+    "mongoose": "^8.0.0",
+    "nodemon": "^3.0.2",
+    "npm": "^10.2.3",
+    "passport": "^0.6.0",
+    "passport-google-oauth2": "^0.2.0",
+    "path": "^0.12.7",
+    "socket.io": "^4.7.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nyu-csci-ua-0467-001-002-fall-2023/final-project-NMichael111-1.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nyu-csci-ua-0467-001-002-fall-2023/final-project-NMichael111-1/issues"
+  },
+  "homepage": "https://github.com/nyu-csci-ua-0467-001-002-fall-2023/final-project-NMichael111-1#readme"
+}
